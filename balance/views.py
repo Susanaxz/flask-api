@@ -3,4 +3,6 @@ from . import app
 
 @app.route('/')
 def inicio():
-    return 'vamos a crear una API'
+    return (f'la ruta del archivo de datos es: {app.config["RUTA"]}<br>'
+            f' Secret key: {app.config["SECRET_KEY"]}')
+    
