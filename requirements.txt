@@ -1,0 +1,9 @@
+click==8.1.3 #framework para gestionar el servidor web. temas de configuración
+colorama==0.4.6
+Flask==2.2.3
+itsdangerous==2.1.2 #proporciona una capa de seguridad por encima de flash para mantener las cookies
+Jinja2==3.1.2  #plantillas 
+MarkupSafe==2.1.2 #trabajar con Jinja
+Werkzeug==2.2.3
+python-dotenv==0.21.1
+black==23.1.0
