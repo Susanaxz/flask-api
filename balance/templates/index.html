@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/flat-remix.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="/static/js/balance.js"></script>
+
+</head>
+
+<body>
+    
+    {% include "components/header.html"%}
+    
+    {% include "components/navbar.html"%}
+
+    
+    <main>
+        
+    <h1>Balance de movimientos</h1>
+
+    <section class="seccion-movimientos">
+
+        <button id="boton-recarga">Recargar</button>
+
+        <table class="paper">
+            <thead>
+                <tr>
+                    <th class="titulo-tabla">Fecha</th>
+                    <th class="titulo-tabla">Concepto</th>
+                    <th class="titulo-tabla">Tipo</th>
+                    <th class="titulo-tabla numero">Cantidad</th>
+                    <th class="titulo-tabla-acciones">Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody id="cuerpo-tabla">
+                <!-- aqui tenemos que cargar los movimiento que leamos de la API -->
+
+            </tbody>
+
+
+        </table>
+
+    </section>
+
+    </main>
+    
+{% include "components/footer.html" %}
+</body>
+</html>

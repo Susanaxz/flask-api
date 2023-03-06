@@ -47,7 +47,9 @@ main {
     margin: auto;
     padding: 20px;
 }
-
+.boton-recarga {
+    margin: auto;
+}
 table.paper {
     width: 100%;
 }

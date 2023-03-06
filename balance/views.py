@@ -1,4 +1,4 @@
-from flask import jsonify #convierte un objeto en un json
+from flask import jsonify, render_template  # convierte un objeto en un json
 from . import app
 from .models import DBManager
 
@@ -19,11 +19,27 @@ Verbos y formato de endpoints
     
 """
 
-RUTA = app.config.get('RUTA')
+RUTA = app.config.get("RUTA")
 
 @app.route('/')
-def inicio():
-    db = DBManager(RUTA)
-    sql = 'SELECT * FROM movimientos'
-    movimientos = db.consultaSQL(sql)
-    return jsonify(movimientos)
+def home():
+    return render_template('index.html')
+
+
+@app.route("/api/v1/movimientos")
+def listar_movimientos():   
+    try:
+        db = DBManager(RUTA)
+        sql = 'SELECT * FROM movimientos'
+        movimientos = db.consultaSQL(sql)
+        resultado = {
+            "status": "success",
+            "results": movimientos
+        }
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": str(error)
+        }
+
+    return jsonify(resultado)
