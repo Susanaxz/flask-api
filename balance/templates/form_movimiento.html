@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+
+
+{% block contenido%}
+
+
+<form action="{{ accion }}" method="POST" novalidate>
+
+    {{ form.csrf_token }}
+    {{ form.id }}
+
+    <div class="campo-formulario">
+        {{ form.fecha.label }}
+        {{ form.fecha }}
+        {% if form.fecha.errors %}
+            {% for mensaje in form.fecha.errors %}
+                <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="campo-formulario">
+        {{ form.concepto.label }}
+        {{ form.concepto() }}
+        {% if form.concepto.errors %}
+            {% for mensaje in form.concepto.errors %}
+                <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="campo-formulario-tipo">
+        {% for campo in form.tipo %}
+        {{ campo }}
+        {{ campo.label }}
+        {% endfor %}
+        {% if form.tipo.errors %}
+            {% for mensaje in form.tipo.errors %}
+                <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="campo-formulario">
+        {{ form.cantidad.label }}
+        {{ form.cantidad }}
+        {% if form.cantidad.errors %}
+            {% for mensaje in form.cantidad.errors %}
+                <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="acciones">
+        {{ form.submit }}
+    </div>
+</form>
+
+{% endblock contenido %}

@@ -23,7 +23,7 @@ function mostrarMovimientos() {
     let html = "";
     for (let i = 0; i < movimientos.length; i = i + 1) {
       const mov = movimientos[i];
-      
+
       if (mov.tipo === "I") {
         mov.tipo = "Ingreso";
       } else if (mov.tipo === "G"){ 
@@ -31,6 +31,9 @@ function mostrarMovimientos() {
       } else {
         mov.tipo = "----";
       }
+      // TODO: Fecha en formato dd/mm/aaaa
+      // TODO: Ajustar los decimales de la cantidad
+      // TODO: Incluir los botones de editar y borrar
 
       html =
         html +
@@ -40,7 +43,7 @@ function mostrarMovimientos() {
           <td>${mov.concepto}</td>
 
           <td>${mov.tipo}</td>
-          <td>${mov.cantidad}</td>
+          <td class= "cantidad">${mov.cantidad}</td>
         </tr>
       `;
     }

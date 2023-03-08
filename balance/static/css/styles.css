@@ -4,6 +4,10 @@
 
 }
 
+td, cantidad {
+    text-align: right;
+}
+
 svg{
     width: auto;
     height: auto;

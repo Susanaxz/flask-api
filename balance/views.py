@@ -1,6 +1,7 @@
 from flask import jsonify, render_template  # convierte un objeto en un json
 from . import app
 from .models import DBManager
+from .forms import MovimientoForm
 
 """
 Como se trabaja una API REST:
@@ -31,6 +32,11 @@ RUTA = app.config.get("RUTA")
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/nuevo')
+def form_nuevo():
+    formulario = MovimientoForm()
+    return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
 
 
 @app.route("/api/v1/movimientos")
@@ -132,3 +138,4 @@ def delete_movimiento(id):
 
 
 # TODO: actualizar movimiento por ID    
+# TODO: crear movimiento nuevo   
