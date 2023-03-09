@@ -236,3 +236,15 @@ width: 100%;
     }
     
 }
+
+.fa-regular, fa-pen-to-square {
+    color: var(--secondary-color);
+    font-size: 1.2rem;  
+       
+}
+
+.fa-solid, fa-square-to-pen {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-left: .5rem;
+}

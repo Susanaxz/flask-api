@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+<script defer src="/static/js/form.js"></script>
+
+{% endblock scripts %}
+
 
 
 {% block contenido%}
 
 
-<form action="{{ accion }}" method="POST" novalidate>
+<form novalidate id="mov-form">
 
     {{ form.csrf_token }}
     {{ form.id }}

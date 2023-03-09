@@ -29,8 +29,15 @@ function sendForm(event) {
       .then((data) => {
         console.log("datos del servidor", data);
         if (data.status === "error") {
+          // TODO: mostrar mensaje de error en la página
+          // TODO: mostrar mensaje de error EN CADA CAMPO
+          // TODO: mostrar mensaje de error en el formulario
+          // TODO: color rojo 
           alert(`ERROR: \n ${data.message}`);
         } else {
+          // TODO: redireccionar a la página de inicio
+          // TODO: o mostrar mensaje de éxito y limpiar el formulario
+          // TODO: el mensaje debe desaparecer en 5 segundos
           alert("Movimiento creado correctamente");
         }
       })

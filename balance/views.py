@@ -1,4 +1,4 @@
-from flask import jsonify, render_template  # convierte un objeto en un json
+from flask import jsonify, render_template, request  # convierte un objeto en un json
 from . import app
 from .models import DBManager
 from .forms import MovimientoForm
@@ -29,6 +29,10 @@ Verbos y formato de endpoints
 
 RUTA = app.config.get("RUTA")
 
+# TODO: CREAR un endpoint para CREAR un movimiento nuevo
+# TODO: CREAR un ednpoint para ACTUALIZAR un movimiento por ID (PUT)
+
+# llamadas a la web, devuelven HTML
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -37,7 +41,10 @@ def home():
 def form_nuevo():
     formulario = MovimientoForm()
     return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
-
+    
+    
+   
+# llamadas a la API REST, devuelven un JSON
 
 @app.route("/api/v1/movimientos")
 def listar_movimientos():   
@@ -135,7 +142,59 @@ def delete_movimiento(id):
         
     return jsonify(resultado), status_code
 
-
-
+@app.route('/api/v1/movimientos', methods = ['POST'])
+def insertar_movimiento ():
+    """
+    201 si se ha creado
+    400 si hay un error de validacion
+    500 si hay un error en el servidor
+    """
+    try:
+       
+        json = request.get_json()
+        form = MovimientoForm(data=json)
+        
+        if form.validate():
+            
+            db = DBManager(RUTA) # instanciamos la clase DBManager
+            sql = 'INSERT INTO movimientos (fecha, concepto, tipo, cantidad) VALUES (:fecha, :concepto, :tipo, :cantidad)'
+            params = request.json
+            es_correcto = db.consultaConParametros(sql, params)
+            if es_correcto:
+                status_code = 201
+                resultado = {
+                    'status': 'success',
+                    'message': 'Movimiento creado correctamente'
+                }
+            else:
+                status_code = 500
+                resultado = {
+                    'status': 'error',
+                    'message': 'No se ha podido crear el movimiento'
+                    
+                }
+            
+        else:
+            status_code = 400
+            resultado = {
+                'status': 'error',
+                'message': 'Los datos recibidos no son correctos',
+                'errors': form.errors
+            }
+        
+        return jsonify({'status': 'success'})
+    
+    
+       
+    except Exception as error:
+        status_code = 500
+        resultado = {
+            'status': 'error',
+            'message': ('Error desconocido en el servidor')
+        }
+        
+    return jsonify(resultado), status_code
+      
+      
+      
 # TODO: actualizar movimiento por ID    
-# TODO: crear movimiento nuevo   
