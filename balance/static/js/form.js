@@ -1,6 +1,6 @@
 console.log("iniciamos ejecucion form.js")
 
-const form = document.getElementById('mov-form');
+const form = document.getElementById('mov-form'); // obtenemos el formulario
 
 form.addEventListener('submit', sendForm)
 
@@ -44,5 +44,27 @@ function sendForm(event) {
       .catch((error) => {
         console.log("ERROR!!!!!", error);
 
-    });
+      });
+  if (method === "PUT") {
+    fetch(`http://127.0.0.1:5000/api/v1/movimientos/${id}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // convertimos la respuesta a un objeto JSON
+        } else {
+          throw new Error(`Error al obtener los datos del movimiento: ${response.statusText}`);
+        }
+      })
+      .then((data) => {
+        const form = document.getElementById("mov-form");
+        form.fecha.value = data.fecha;
+        form.concepto.value = data.concepto;
+        form.tipo.value = data.tipo;
+        form.cantidad.value = data.cantidad;
+
+      })
+      .catch((error) => {
+        console.log("ERROR al obtener los datos del movimiento!!!!!", error);
+      }
+    );  
+  }
 }
