@@ -1,4 +1,5 @@
-from flask import jsonify, render_template, request  # convierte un objeto en un json
+from flask import jsonify, render_template, request, redirect  # convierte un objeto en un json
+import time
 from . import app
 from .models import DBManager
 from .forms import MovimientoForm
@@ -120,18 +121,21 @@ def delete_movimiento(id):
                     'status': 'success'
                 }
                 status_code = 204
+            
             else:
                 resultado = {
                     'status': 'error',
                     'message': f'No se ha eliminado el movimiento con ID={id}'
                 }
                 status_code = 500
+                
         else:
                 resultado = {
                     'status': 'error',
                     'message': f'No existe un movimiento con ID={id}'
                 }
                 status_code = 404
+                
                 
     except: 
         resultado = {

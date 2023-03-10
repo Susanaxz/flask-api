@@ -12,14 +12,35 @@ function cargarMovimientos() {
   console.log("FIN de la función cargarMovimientos()");
 }
 
-// crear una función que borre un movimiento pulsando el botón de la papelera del html
-function borrarMovimiento() {
-  spinner.classList.remove("off"); // quitamos la clase off al spinner para
-  if (confirm("¿Estás seguro de que quieres borrar el movimiento?")) {
-    peticion.open("DELETE", "http://127.0.0.1:5000/api/v1/movimientos${mov.id}");
-  
+// como cargar la biblioteca de toastr
+// https://cdnjs.com/libraries/toastr.js/latest
+// https://cdnjs.com/libraries/toastr.js/latest/toastr.min.js
+// https://cdnjs.com/libraries/toastr.js/latest/toastr.min.css
+// https://cdnjs.com/libraries/toastr.js/latest/toastr.css
+
+function borrarMovimiento(id) {
+  if (confirm("¿Estás seguro de que quieres borrar este movimiento?")) {
+    fetch(`http://127.0.0.1:5000/api/v1/movimientos/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Movimiento borrado correctamente");
+          toastr.options.positionClass = "toast-bottom-right";
+          toastr.success("Movimiento borrado correctamente");
+          cargarMovimientos();
+
+        } else {
+          alert("Error al borrar el movimiento");
+        }
+      })
+      .catch((error) => {
+        console.error("Se ha producido un error:", error);
+        toastr.error("No ha sido posible borrar el movimiento");
+      });
+
   }
-}
+};
     
 
 function mostrarMovimientos() {
@@ -56,10 +77,10 @@ function mostrarMovimientos() {
           <td class= "cantidad">${mov.cantidad}</td>
           
           <td>
-          <a href="/api/v1/movimientos/" class="editar-movimiento" data-id="${mov.id}"><i class="fa-regular fa-pen-to-square" onclick="editar_movimiento"></i></a> 
+          <a href="" class="editar-movimiento" data-id="${mov.id}"><i class="fa-regular fa-pen-to-square" onclick="editar_movimiento"></i></a> 
         
+          <a href="" class="borrar-movimiento" data-id="${mov.id}"><i class="fa-regular fa-trash-can" onclick="borrarMovimiento(${mov.id})"></i></a>
 
-          <a href="/api/v1/movimientos/" class="borrar-movimiento" data-id="${mov.id}"><i class="fa-solid fa-trash" onclick="borrar_movimiento"></i> </a> 
           </td>
         </tr>
       `;
@@ -74,7 +95,7 @@ function mostrarMovimientos() {
 
   spinner.classList.add("off"); // añadimos la clase off al spinner para que desaparezca cuando se ejecute la función mostrarMovimientos
   console.log("FIN de la función mostrarMovimientos");
-}
+  }
 
 window.onload = function () {
   console.log("Función anónima al finalizar la carga de la ventana");
@@ -84,4 +105,4 @@ window.onload = function () {
   
   cargarMovimientos();
   peticion.onload = mostrarMovimientos;
-};
+  };

@@ -7,10 +7,11 @@
     <title>{% block head_title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="/static/css/flat-remix.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+    <link rel="stylesheet" href="/static/css/toastr.min.css"/>
+    <link rel="stylesheet" href="/static/css/toastr.css">
+    <script src="/static/js/toastr.min.js"></script>
+    
     {% block scripts %} {% endblock %}
   </head>
 
@@ -25,5 +26,6 @@
     <main>{% block contenido %} {% endblock contenido %}</main>
 
     {% include "components/footer.html" %}
+   
   </body>
 </html>
