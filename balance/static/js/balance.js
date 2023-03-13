@@ -13,21 +13,25 @@ function cargarMovimientos() {
   console.log("FIN de la función cargarMovimientos()");
 }
 
-function borrarMovimiento(id) {
-  console.log(`borramos el movimiento con id: ${id}`);
-  spinner.classList.add("off");
-  if (confirm("¿Estás seguro de que quieres borrar este movimiento?")) {
-    fetch(`http://127.0.0.1:5000/api/v1/movimientos/${id}`, {
-      method: "DELETE",
-    }).then((response) => {
-      console.log("Respuesta del servidor:", response.ok);
-      if (response.status === 200 || response.status === 204) {
-        alert("Movimiento borrado correctamente");
+function borrarMovimiento(event) {
+  const target = event.target;
+  const id = target.getAttribute("data-id");
+  fetch(`http://127.0.0.1:5000/api/v1/movimientos/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        alert(`El movimiento ha sido eliminado correctamente.`);
+        cargarMovimientos();
+        // FIXME: Simplemente eliminar la línea del movimiento (sin recargarlos todos)
       } else {
-        alert("Error al borrar el movimiento");
+        alert("ERROR: La eliminación del movimiento ha fallado.");
       }
-    });
-  }
+    })
+    .catch((error) => alert("ERROR DESCONOCIDO al borrar el movimiento (API)"));
 }
 
 function editarMovimiento(id) {
@@ -111,28 +115,32 @@ function mostrarMovimientos() {
       // TODO: Fecha en formato dd/mm/aaaa
       // TODO: Ajustar los decimales de la cantidad
       const opciones = {
-        minimumFractionsDigits: 2,
-        maximumFrancionsDigits: 2
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       };
-      const formateador = new Intl.NumberFormat('es-ES', opciones);
+      const formateador = new Intl.NumberFormat("es-ES", opciones);
       const cantidad = formateador.format(mov.cantidad);
 
-      // const LaCantidad = mov.cantidad.toLocaleString();
+      const fecha = new Date(mov.fecha);
+      const fechaFormateada = fecha.toLocaleDateString('es-ES')
    
       html =
         html +
         `
         <tr>
-          <td>${mov.fecha}</td>
-          <td>${mov.concepto}</td>
+          <td class = fecha-format >${fechaFormateada}</td>
+          <td class = fecha-format>${mov.concepto}</td>
 
-          <td>${mov.tipo}</td>
+          <td class = fecha-format>${mov.tipo}</td>
           <td class= "cantidad">${cantidad}</td>
           
-          <td>
+          <td class= acciones>
           <a href="http://127.0.0.1:5000/editar/${mov.id}" class="editar-movimiento-enlace" data-id="${mov.id}"><i class="fa-regular fa-pen-to-square" onclick="editarMovimiento(${mov.id})"></i></a> 
-        
-          <a href="" class="borrar-movimiento" data-id="${mov.id}"><i class="fa-regular fa-trash-can" onclick="borrarMovimiento(${mov.id})"></i></a>
+          
+          <a class="borrar-movimiento">
+              <i class="fa-regular fa-trash-can" data-id="${mov.id}"></i>
+            </a>
+          
 
           </td>
         </tr>
@@ -141,6 +149,12 @@ function mostrarMovimientos() {
 
     const tabla = document.querySelector("#cuerpo-tabla");
     tabla.innerHTML = html;
+
+     const botonesBorrar = document.querySelectorAll(".borrar-movimiento");
+     // for btn in botonesBorrar:
+     botonesBorrar.forEach((btn) => {
+       btn.addEventListener("click", borrarMovimiento);
+     });
   } else {
     console.error("---- Algo ha ido mal en la petición ----");
     alert("Error al cargar los movimientos");
