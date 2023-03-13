@@ -1,9 +1,9 @@
 from flask import jsonify, render_template, request, redirect  # convierte un objeto en un json
-import time
+
 from . import app
 from .models import DBManager
 from .forms import MovimientoForm
-from datetime import date
+
 
 
 """
@@ -48,10 +48,11 @@ def form_nuevo():
 def editar(id):
     db = DBManager(RUTA)
     movimiento = db.obtener_movimiento(id)
+
     formulario = MovimientoForm(data=movimiento)
     
     
-    return render_template('form_movimiento.html', form=formulario, accion=f'/editar/{id}')
+    return render_template('form_movimiento.html', form=formulario)
    
 # llamadas a la API REST, devuelven un JSON
 

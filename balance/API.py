@@ -159,40 +159,52 @@ def insertar_movimiento ():
 @app.route('/api/v1/movimientos/<int:id>', methods=['PUT'])
 def editar_movimiento(id):
     try:
-        headers = request.headers
-        if headers.get('Content-Type') != 'application/json':
-            return jsonify({'status': 'error', 'message': 'Content-Type debe ser application/json'}), 400
+        json = request.get_json()
+        form = MovimientoForm(data=json)
         
-        db = DBManager(RUTA)
-        movimiento = db.obtener_movimiento(id)
-        if not movimiento:
-            return jsonify({'status': 'error', 'message': f'No existe un movimiento con ID={id}'}), 404
-
-        # Validar los datos recibidos en el body de la petición (request.json)
-        data = request.json
-        if not all(key in data for key in ["fecha", "concepto", "tipo", "cantidad"]):
-            return jsonify({'status': 'error', 'message': 'Datos incompletos'}), 400
-        
-        fecha = data['fecha']
-        concepto = data['concepto']
-        tipo = data['tipo']
-        cantidad = data['cantidad']
-
-        sql = "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? WHERE id=?"
-        es_correcto = db.consultaConParametros(sql, (fecha, concepto, tipo, cantidad, id))
-
-        if es_correcto:
-            status_code = 200
-            resultado = {
-                'status': 'success',
-                'message': 'Movimiento actualizado correctamente'
-            }
+        if form.validate():
+            if id == form.id.data:
+                db = DBManager(RUTA)
+                sql = "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? WHERE id=?"
+                params = (
+                    form.fecha.data,
+                    form.concepto.data,
+                    form.tipo.data,
+                    form.cantidad.data,
+                    form.id.data
+                )
+                
+                modificado = db.consultaConParametros(sql, params)
+                
+                if modificado:
+                    status_code = 200
+                    resultado = {
+                        'status': 'success',
+                        'message': 'Movimiento modificado correctamente'
+                    }
+                    
+                else:
+                    status_code = 500
+                    resultado = {
+                        'status': 'error',
+                        'message': 'No se ha podido modificar el movimiento'
+                    }
+                    
+            else:
+                status_code = 400
+                resultado = {
+                    'status': 'error',
+                    'message': 'El ID del movimiento no coincide con el de la URL'
+                }
+            
         else:
-            status_code = 500
+            status_code = 400
             resultado = {
                 'status': 'error',
-                'message': 'No se ha podido actualizar el movimiento'
+                'message': 'Los datos recibidos no son correctos',
+                'errors': form.errors
             }
+         
     except Exception as error:
         status_code = 500
         resultado = {
