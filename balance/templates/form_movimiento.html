@@ -10,10 +10,11 @@
 {% block contenido%}
 
 
-<form novalidate id="mov-form">
 
-    {{ form.csrf_token }}
-    {{ form.id }}
+<form novalidate id="mov-form">
+    
+  {{ form.csrf_token }}
+  {{ form.id }}
 
     <div class="campo-formulario">
         {{ form.fecha.label }}

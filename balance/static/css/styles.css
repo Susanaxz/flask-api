@@ -215,7 +215,7 @@ width: 100%;
 
 .overlay.off {
     display: none; /*hace que se oculte*/
-
+    
 }
 
 .doble-anillo {
@@ -249,3 +249,23 @@ width: 100%;
     margin-left: .5rem;
 }
 
+.toastr {
+    display: none;
+    position: absolute;
+    min-width: 300px;
+    min-height: 40px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    bottom: 70px;
+    right: 30px;
+}
+.toastr.success {
+    background-color: #4caf50;
+    border: 2px solid #225024; 
+    color: #076b0c;
+}
+.toast.error {
+    background-color: #f44336;
+    border: 2px solid #b8174c;
+    color: #b8174c;
+}

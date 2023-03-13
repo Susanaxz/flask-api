@@ -118,7 +118,6 @@ class DBManager:
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
         cursor.execute(consulta, (id,))
-        movimientos_por_pagina = 10
         datos = cursor.fetchone()
         resultado = None
 
