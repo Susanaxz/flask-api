@@ -1,66 +1,58 @@
-from flask import jsonify, render_template, request, redirect  # convierte un objeto en un json
+from flask import render_template
 
 from . import app
-from .models import DBManager
 from .forms import MovimientoForm
-
+from .models import DBManager
 
 
 """
-Como se trabaja una API REST:
-Verbos y formato de endpoints
-    GET /movimientos ---------> LISTAR movimientos
+    Verbos y formato de endpoints
+    GET /movimientos ----------> LISTAR movimientos
     POST /movimientos ---------> CREAR un movimiento nuevo
-    
-    GET /movimientos/1 ---------> LEER el movimiento con ID=1
-    POST /movimientos/1 ---------> ACTUALIZAR el movimiento con ID=1 (sobreescribe todo el objeto)
-    PUT /movimientos/1 ---------> ACTUALIZAR el movimiento con ID=1 (sobreescrir los campos que enviemos, sobreescribe parcialmente)
-    DELETE /movimientos/1 ---------> ELIMINA el movimiento con ID=1 
-    
-    !!!IMPORTANTE!!!
-    Versionar los endpoints (son un contrato)
+    GET /movimientos/1 --------> LEER el movimiento con ID=1
+    POST /movimientos/1 -------> ACTUALIZAR el movimiento con ID=1 (sobreescribe todo el objeto)
+    PUT /movimientos/1 --------> ACTUALIZAR el movimiento con ID=1 (sobreescribe parcialmente)
+    DELETE /movimientos/1 -----> ELIMINAR el movimiento con ID=1
+    IMPORTANTE!!!
+    Versionar los endpoint (son un contrato)
     /api/v1/...
-    
-    devuelve un array de objetos JSON o un objeto JSON
+    /api/v1/facturas
+    /api/v2/movimientos
+    /api/v1/contatos
+    /api/v1/usuarios
+    /api/v1/donaciones
+    /api/v1/compras
+    Devuelve un array de objetos JSON o un objeto JSON.
+    Por ejemplo, un movimiento:
     {
-        "id": 1,
-        "fecha": 2023-02-23,
-        "concepto": camisa,
-        "tipo": "G"
+    "id": 1,
+    "fecha": "2023-02-27",
+    "concepto": "Camiseta",
+    "tipo": "G",
+    "cantidad": 12.35
     }
 """
 
-RUTA = app.config.get("RUTA")
 
-# TODO: CREAR un ednpoint para ACTUALIZAR un movimiento por ID (PUT)
+# Devuelve HTML, son vistas estándar (clásicas)
 
-# llamadas a la web, devuelven HTML
-@app.route('/', methods = ['GET'])
+RUTA = app.config.get('RUTA')
+
+
+@app.route('/')
 def home():
-    db = DBManager(RUTA)
-    page = int(request.args.get('page', 1))
-    items_per_page = 8
-    items, total_items = db.get_paginated_movements(page, items_per_page)
-    num_pages = (total_items - 1) // items_per_page + 1
-    return render_template('index.html', items=items, page=page, num_pages=num_pages, current_page=page)
+    return render_template('index.html')
+
 
 @app.route('/nuevo')
 def form_nuevo():
     formulario = MovimientoForm()
-    return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
-    
-@app.route('/editar/<int:id>')
-def editar(id):
-    db = DBManager(RUTA)
-    movimiento = db.obtener_movimiento(id)
-
-    formulario = MovimientoForm(data=movimiento)
-    
-    
     return render_template('form_movimiento.html', form=formulario)
-   
-# llamadas a la API REST, devuelven un JSON
 
 
-      
-
+@app.route('/modificar/<int:id>')
+def form_modificar(id):
+    db = DBManager(RUTA)
+    mov = db.obtenerMovimiento(id)
+    formulario = MovimientoForm(data=mov)
+    return render_template('form_movimiento.html', form=formulario)

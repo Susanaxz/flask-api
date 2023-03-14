@@ -34,30 +34,7 @@
 
     </table>
 
-    <!-- <div class="pagination">
-    <button class="page-link" data-page="1">&laquo;</button>
-        <button class="page-link" data-page="-1">&lt;</button>
-        <span class= page-numbers></span>
-        <button class="page-link" data-page="1">&gt;</button>
-        <button class="page-link" data-page="-1">&raquo;</button>
-    </div> -->
 
-<div class="pagination">
-  {% if page > 1 %}
-    <a href="?page={{ page-1 }}">anterior</a>
-  {% endif %}
-  
-  {% for p in range(1, num_pages+1) %}
-    {% if p == page %}
-      <span class="current">{{ p }}</span>
-    {% else %}
-      <a href="?page={{ p }}">{{ p }}</a>
-    {% endif %}
-  {% endfor %}
-  
-  {% if page < num_pages %}
-    <a href="?page={{ page+1 }}">siguiente</a>
-  {% endif %}
 </div>
 </section>
 
