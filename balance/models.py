@@ -181,3 +181,14 @@ class DBManager:
         datos = cursor.fetchall()
         conexion.close()
         return datos
+    
+    def get_paginated_movements(self, page, items_per_page):
+        offset = (page - 1) * items_per_page
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        cursor.execute('SELECT COUNT(*) FROM movimientos')
+        total_items = cursor.fetchone()[0]
+        cursor.execute('SELECT * FROM movimientos LIMIT ? OFFSET ?', (items_per_page, offset))
+        items = cursor.fetchall()
+        cursor.close()
+        return items, total_items

@@ -35,9 +35,14 @@ RUTA = app.config.get("RUTA")
 # TODO: CREAR un ednpoint para ACTUALIZAR un movimiento por ID (PUT)
 
 # llamadas a la web, devuelven HTML
-@app.route('/')
+@app.route('/', methods = ['GET'])
 def home():
-    return render_template('index.html')
+    db = DBManager(RUTA)
+    page = int(request.args.get('page', 1))
+    items_per_page = 8
+    items, total_items = db.get_paginated_movements(page, items_per_page)
+    num_pages = (total_items - 1) // items_per_page + 1
+    return render_template('index.html', items=items, page=page, num_pages=num_pages, current_page=page)
 
 @app.route('/nuevo')
 def form_nuevo():

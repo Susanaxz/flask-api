@@ -1,3 +1,5 @@
+// archivo js que se encarga de la comunicación con la API y de la lógica de la aplicación
+
 let spinner;
 const peticion = new XMLHttpRequest();
 console.log("Empiezo a ejecutar JS");
@@ -8,10 +10,14 @@ function cargarMovimientos() {
   spinner.classList.remove("off"); // quitamos la clase off al spinner para
 
   peticion.open("GET", "http://127.0.0.1:5000/api/v1/movimientos", true);
+  
+
   peticion.send();
 
   console.log("FIN de la función cargarMovimientos()");
 }
+  
+
 
 function borrarMovimiento(event) {
   const target = event.target;
@@ -34,64 +40,6 @@ function borrarMovimiento(event) {
     .catch((error) => alert("ERROR DESCONOCIDO al borrar el movimiento (API)"));
 }
 
-function editarMovimiento(id) {
-  console.log(`editamos el movimiento con id: ${id}`);
-  spinner.classList.add("off");
-  obtenerMovimiento(id).then((movimiento) => {
-    console.log("Movimiento:", movimiento);
-    
-    document.querySelector("#id_id").value = movimiento.id;
-    document.querySelector("#fecha_id").value = movimiento.fecha.slice(0, 10);
-    document.querySelector("#concepto_id").value = movimiento.concepto;
-    document.querySelector("#tipo_id").value = movimiento.tipo;
-    document.querySelector("#cantidad_id").value = movimiento.cantidad;
-  }); 
-  
-  
-}
-
-function actualizarMovimiento(id) {
-  console.log("Has llamado a la función actualizarMovimiento()");
-  spinner.classList.add("off"); // quitamos la clase off al spinner para
-
-  const datos = {
-    fecha: document.querySelector("#fecha_id").value,
-    concepto: document.querySelector("#concepto_id").value,
-    tipo: document.querySelector("#tipo_id").value,
-    cantidad: document.querySelector("#cantidad_id").value,
-  };
-  
-  peticion
-    .open(`http://127.0.0.1:5000/api/v1/movimientos/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrfToken,
-      },
-      body: JSON.stringify(datos),
-    })
-    .then((response) => {
-      if (response.ok) {
-        window.location.href = "/";
-      } else {
-        throw new Error("Error al actualizar el movimiento.");
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("Error al actualizar el movimiento.");
-    })
-    .finally(() => {
-      spinner.classList.add("off");
-    });
-}
-
-function obtenerMovimiento(id) {
-  return fetch(`http://127.0.0.1:5000/api/v1/movimientos/${id}`) // Hacemos una petición GET al servidor para obtener los datos del movimiento con el id indicado
-    .then((response) => response.json())
-
-    .catch((error) => console.error(error));
-}
 
 function mostrarMovimientos() {
   console.log("Entramos en la función mostrarMovimientos", this);
@@ -135,8 +83,10 @@ function mostrarMovimientos() {
           <td class= "cantidad">${cantidad}</td>
           
           <td class= acciones>
-          <a href="http://127.0.0.1:5000/editar/${mov.id}" class="editar-movimiento-enlace" data-id="${mov.id}"><i class="fa-regular fa-pen-to-square" onclick="editarMovimiento(${mov.id})"></i></a> 
-          
+          <a href="/editar/${mov.id}" class="link-icon">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </a>
+           
           <a class="borrar-movimiento">
               <i class="fa-regular fa-trash-can" data-id="${mov.id}"></i>
             </a>
